@@ -1,0 +1,108 @@
+-- drop database TOOEZ;
+create database if not exists SHIFT_MANAGER;
+use SHIFT_MANAGER;
+
+
+drop table if exists SHIFT_MANAGER.UTENTI2RAPPORTINO;
+drop table if exists SHIFT_MANAGER.RESOCONTO_LAVORO;
+drop table if exists SHIFT_MANAGER.UTENTI;
+drop table if exists SHIFT_MANAGER.SCONTRINI;
+drop table if exists SHIFT_MANAGER.RAPPORTINO;
+drop table if exists SHIFT_MANAGER.COMMESSE;
+drop table if exists SHIFT_MANAGER.CLIENTI;
+drop table if exists SHIFT_MANAGER.DBG;
+
+
+
+create table if not exists SHIFT_MANAGER.UTENTI (
+	UTENTE_ID INT NOT NULL AUTO_INCREMENT,
+    primary key (UTENTE_ID),
+    NOME VARCHAR(50) NOT NULL,
+    COGNOME VARCHAR(50) NOT NULL,
+    unique (NOME,COGNOME)
+)ENGINE=INNODB;
+
+create table if not exists SHIFT_MANAGER.RAPPORTINO (
+	RAPPORTINO_ID BIGINT NOT NULL AUTO_INCREMENT,
+    primary key (RAPPORTINO_ID),
+    PATH VARCHAR(250),
+    T_STAMP TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	AM_I_NEW BIT(1) DEFAULT TRUE
+)ENGINE=INNODB;
+
+
+
+create table if not exists SHIFT_MANAGER.CLIENTI (
+	CLIENTE_ID INT AUTO_INCREMENT,
+    primary key(CLIENTE_ID),
+    NOME VARCHAR(50),
+    unique 
+) ENGINE=INNODB ;
+
+
+
+create table if not exists SHIFT_MANAGER.COMMESSE (
+	COMMESSA_ID INT AUTO_INCREMENT,
+    primary key(COMMESSA_ID),
+    NOME VARCHAR(50),
+    CLIENTE_ID INT,
+    foreign key (CLIENTE_ID) references CLIENTI(CLIENTE_ID)
+) ENGINE=INNODB ;
+
+
+
+create table if not exists SHIFT_MANAGER.RESOCONTO_LAVORO (
+	RESOCONTO_ID BIGINT NOT NULL AUTO_INCREMENT,
+    primary key (RESOCONTO_ID),
+	RAPPORTINO_ID BIGINT DEFAULT NULL,
+    foreign key (RAPPORTINO_ID) references RAPPORTINO(RAPPORTINO_ID),
+    UTENTE_ID INT,
+    foreign key (UTENTE_ID) references UTENTI(UTENTE_ID),
+    CLIENTE_ID INT,
+    foreign key (CLIENTE_ID) references CLIENTI(CLIENTE_ID),
+    COMMESSA_ID INT,
+    foreign key (COMMESSA_ID) references COMMESSE(COMMESSA_ID),
+    DATA_INTERVENTO DATE NOT NULL,
+    TOTALE_LAVORO FLOAT,
+    TOTALE_VIAGGIO FLOAT,
+    SPESE FLOAT,
+    KM FLOAT,
+    TIPOLOGIA_LAVORO INT
+) ENGINE=INNODB ;
+
+create table if not exists SHIFT_MANAGER.UTENTI2RAPPORTINO (
+	UTENTE_ID INT,
+    foreign key (UTENTE_ID) references UTENTI(UTENTE_ID),
+	RAPPORTINO_ID BIGINT,
+    foreign key (RAPPORTINO_ID) references RAPPORTINO(RAPPORTINO_ID),
+    primary key (UTENTE_ID,RAPPORTINO_ID)
+) ENGINE=INNODB ;
+
+create table if not exists SHIFT_MANAGER.SCONTRINI (
+	SCONTRINO_ID BIGINT AUTO_INCREMENT,
+    primary key(SCONTRINO_ID),
+	RAPPORTINO_ID BIGINT,
+    foreign key (RAPPORTINO_ID) references RAPPORTINO(RAPPORTINO_ID),
+    BODY TEXT
+) ENGINE=INNODB ;
+
+
+
+
+
+
+
+
+
+create table if not exists SHIFT_MANAGER.DBG (
+	ID INT NOT NULL AUTO_INCREMENT,
+	DATE_TIME TIMESTAMP,
+    OBJECT varchar(30),
+    STATE boolean,
+    INFO text,
+    MESSAGE text,
+    INNER_EXCEPTION text,
+    primary key (ID)
+)ENGINE=INNODB;
+
+
