@@ -4,9 +4,9 @@ use SHIFT_MANAGER;
 
 
 drop table if exists SHIFT_MANAGER.UTENTI2RAPPORTINO;
+drop table if exists SHIFT_MANAGER.SCONTRINI;
 drop table if exists SHIFT_MANAGER.RESOCONTO_LAVORO;
 drop table if exists SHIFT_MANAGER.UTENTI;
-drop table if exists SHIFT_MANAGER.SCONTRINI;
 drop table if exists SHIFT_MANAGER.RAPPORTINI;
 drop table if exists SHIFT_MANAGER.COMMESSE;
 drop table if exists SHIFT_MANAGER.CLIENTI;
@@ -60,8 +60,6 @@ create table if not exists SHIFT_MANAGER.RESOCONTO_LAVORO (
     foreign key (RAPPORTINO_ID) references RAPPORTINO(RAPPORTINO_ID),
     UTENTE_ID INT,
     foreign key (UTENTE_ID) references UTENTI(UTENTE_ID),
-    CLIENTE_ID INT,
-    foreign key (CLIENTE_ID) references CLIENTI(CLIENTE_ID),
     COMMESSA_ID INT,
     foreign key (COMMESSA_ID) references COMMESSE(COMMESSA_ID),
     DATA_INTERVENTO DATE NOT NULL,
@@ -69,6 +67,7 @@ create table if not exists SHIFT_MANAGER.RESOCONTO_LAVORO (
     TOTALE_VIAGGIO FLOAT,
     SPESE FLOAT,
     KM FLOAT,
+    INFO TEXT,
     TIPOLOGIA_LAVORO INT
 ) ENGINE=INNODB ;
 
@@ -83,8 +82,8 @@ create table if not exists SHIFT_MANAGER.UTENTI2RAPPORTINO (
 create table if not exists SHIFT_MANAGER.SCONTRINI (
 	SCONTRINO_ID BIGINT AUTO_INCREMENT,
     primary key(SCONTRINO_ID),
-	RAPPORTINO_ID BIGINT,
-    foreign key (RAPPORTINO_ID) references RAPPORTINO(RAPPORTINO_ID),
+	RESOCONTO_ID BIGINT,
+    foreign key (RESOCONTO_ID) references RESOCONTO_LAVORO(RESOCONTO_ID),
     BODY TEXT
 ) ENGINE=INNODB ;
 
