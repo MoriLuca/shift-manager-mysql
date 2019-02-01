@@ -7,7 +7,7 @@ drop table if exists SHIFT_MANAGER.UTENTI2RAPPORTINO;
 drop table if exists SHIFT_MANAGER.RESOCONTO_LAVORO;
 drop table if exists SHIFT_MANAGER.UTENTI;
 drop table if exists SHIFT_MANAGER.SCONTRINI;
-drop table if exists SHIFT_MANAGER.RAPPORTINO;
+drop table if exists SHIFT_MANAGER.RAPPORTINI;
 drop table if exists SHIFT_MANAGER.COMMESSE;
 drop table if exists SHIFT_MANAGER.CLIENTI;
 drop table if exists SHIFT_MANAGER.DBG;
@@ -19,10 +19,11 @@ create table if not exists SHIFT_MANAGER.UTENTI (
     primary key (UTENTE_ID),
     NOME VARCHAR(50) NOT NULL,
     COGNOME VARCHAR(50) NOT NULL,
-    unique (NOME,COGNOME)
+    unique (NOME,COGNOME),
+    ROLE INT DEFAULT 0
 )ENGINE=INNODB;
 
-create table if not exists SHIFT_MANAGER.RAPPORTINO (
+create table if not exists SHIFT_MANAGER.RAPPORTINI (
 	RAPPORTINO_ID BIGINT NOT NULL AUTO_INCREMENT,
     primary key (RAPPORTINO_ID),
     PATH VARCHAR(250),
@@ -36,7 +37,7 @@ create table if not exists SHIFT_MANAGER.CLIENTI (
 	CLIENTE_ID INT AUTO_INCREMENT,
     primary key(CLIENTE_ID),
     NOME VARCHAR(50),
-    unique 
+    unique (NOME)
 ) ENGINE=INNODB ;
 
 
@@ -46,7 +47,8 @@ create table if not exists SHIFT_MANAGER.COMMESSE (
     primary key(COMMESSA_ID),
     NOME VARCHAR(50),
     CLIENTE_ID INT,
-    foreign key (CLIENTE_ID) references CLIENTI(CLIENTE_ID)
+    foreign key (CLIENTE_ID) references CLIENTI(CLIENTE_ID),
+    unique (COMMESSA_ID, NOME)
 ) ENGINE=INNODB ;
 
 
